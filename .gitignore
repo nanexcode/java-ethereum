@@ -1,0 +1,12 @@
+target/
+delombok/
+.mvn/
+.gradle/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+build

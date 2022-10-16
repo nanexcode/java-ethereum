@@ -1,0 +1,86 @@
+
+buildscript {
+
+    // libraries version definition
+    ext {
+
+    }
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+}
+
+plugins {
+    id 'java'
+
+}
+
+
+allprojects {
+    group 'org.eth'
+
+    apply plugin: 'java-library'
+    apply plugin: 'java'
+
+    repositories {
+        mavenLocal()
+        mavenCentral()
+    }
+
+    configurations {
+	    compileOnly {
+		    extendsFrom annotationProcessor
+	    }
+    }
+
+
+
+    test {
+        failFast = true
+        testLogging {
+            events 'passed', 'skipped', 'failed'
+            exceptionFormat 'full'
+            showStandardStreams = true
+        }
+        include 'exchange/**'
+        exclude '**/perf'
+    }
+
+
+    dependencies {
+        // Spring dependencies
+
+        compileOnly "org.projectlombok:lombok:1.18.22"
+        annotationProcessor 'org.projectlombok:lombok:1.18.22'
+
+        testImplementation "org.projectlombok:lombok:1.18.22"
+    }
+
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.incremental = true
+            sourceCompatibility = '11'
+            targetCompatibility = '11'
+            options.encoding = 'UTF-8'
+
+            test {
+                failFast = true
+                testLogging {
+                    events 'passed', 'skipped', 'failed'
+                    exceptionFormat 'full'
+                    showStandardStreams = true
+                }
+            }
+        }
+    }
+
+    test {
+        filter {
+            excludeTestsMatching "*Perf*"
+        }
+    }
+}
+
